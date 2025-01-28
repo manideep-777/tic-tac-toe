@@ -1,26 +1,30 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import Sqaure from './Sqaure'
 import './App.css'
-import { check_row, check_cols, check_cross_dig1, check_cross_dig2, check_tie } from './boardUtils'
+import { useBoardUtils } from './boardUtils'
+import { BoardContext } from './BoardContext'
+
 
 export default function Board() {
-
-    const [count, setCount] = useState(1);
-    const [boardArr, setBoardArr] = useState(Array(9).fill(null));
-    const [win, setWin] = useState("");
-    const [stopGame, setStopGame] = useState(false);
-    const [xscore, setXscore] = useState(0);
-    const [oscore, setOscore] = useState(0);
-    const [newGame, setNewGame] = useState(false);
-    const [whoStart, setWhoStart] = useState("X");
-    const [xo, setxo] = useState("O")
+    const { check_row, check_cols, check_cross_dig1, check_cross_dig2, check_tie } = useBoardUtils();
+    
+    const {count, setCount, boardArr, setBoardArr, win, setWin, stopGame, setStopGame, xscore, setXscore, oscore, setOscore, newGame, setNewGame, whoStart, setWhoStart, xo, setxo} = useContext(BoardContext)
+    // const [count, setCount] = useState(1);
+    // const [boardArr, setBoardArr] = useState(Array(9).fill(null));
+    // const [win, setWin] = useState("");
+    // const [stopGame, setStopGame] = useState(false);
+    // const [xscore, setXscore] = useState(0);
+    // const [oscore, setOscore] = useState(0);
+    // const [newGame, setNewGame] = useState(false);
+    // const [whoStart, setWhoStart] = useState("X");
+    // const [xo, setxo] = useState("O")
 
     useEffect(() => {
         const func = async () => {
-            await check_row(boardArr, xscore, oscore, setWin, setXscore, setOscore, setCount);
-            await check_cols(boardArr, xscore, oscore, setWin, setXscore, setOscore, setCount);
-            await check_cross_dig1(boardArr, xscore, oscore, setWin, setXscore, setOscore, setCount);
-            await check_cross_dig2(boardArr, xscore, oscore, setWin, setXscore, setOscore, setCount);
+            await check_row();
+            await check_cols();
+            await check_cross_dig1();
+            await check_cross_dig2();
         }
         func();
     }, [boardArr])
